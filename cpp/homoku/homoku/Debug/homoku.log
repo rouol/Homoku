@@ -1,0 +1,27 @@
+﻿  Homoku.cpp
+C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\Homoku.h(270,27): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\Homoku.h(300,23): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\Homoku.h(343,27): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\Sequence.h(127,2): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\Sequence.h(125): message : во время компиляции функции-члена класс шаблон "Sequence<T> *ArraySequence<T>::Concat(Sequence<T> *)"
+          with
+          [
+              T=int
+          ]
+C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\Homoku.h(30): message : выполняется компиляция ссылки на экземпляр класс шаблон функции "ArraySequence<int>"
+C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\Sequence.h(131,2): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\Sequence.h(116,2): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\Sequence.h(109): message : во время компиляции функции-члена класс шаблон "Sequence<T> *ArraySequence<T>::GetSubSequence(const size_t,const size_t)"
+          with
+          [
+              T=int
+          ]
+C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\Sequence.h(117,11): warning C4018: >=: несоответствие типов со знаком и без знака
+C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\Sequence.h(117,27): warning C4018: <=: несоответствие типов со знаком и без знака
+C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\Sequence.h(324,20): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\Homoku.h(344): message : выполняется компиляция ссылки на экземпляр шаблон функции "std::ostream &operator <<<T>(std::ostream &,Sequence<T> *)"
+          with
+          [
+              T=int
+          ]
+  homoku.vcxproj -> C:\Raul\programming\cpp\Homoku\cpp\homoku\Debug\homoku.exe

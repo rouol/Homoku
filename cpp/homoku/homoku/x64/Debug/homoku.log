@@ -1,0 +1,54 @@
+﻿  Homoku.cpp
+C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\Homoku.h(303,130): warning C4244: return: преобразование "double" в "int", возможна потеря данных
+C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\Sequence.h(131,1): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\Sequence.h(125): message : во время компиляции функции-члена класс шаблон "Sequence<T> *ArraySequence<T>::Concat(Sequence<T> *)"
+          with
+          [
+              T=int
+          ]
+C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\Homoku.h(34): message : выполняется компиляция ссылки на экземпляр класс шаблон функции "ArraySequence<int>"
+C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\Sequence.h(113,1): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\Sequence.h(109): message : во время компиляции функции-члена класс шаблон "Sequence<T> *ArraySequence<T>::GetSubSequence(const size_t,const size_t)"
+          with
+          [
+              T=int
+          ]
+C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\Sequence.h(95,1): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\Sequence.h(94): message : во время компиляции функции-члена класс шаблон "void ArraySequence<int>::InsertAt(T,const size_t)"
+          with
+          [
+              T=int
+          ]
+C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\Sequence.h(128): message : выполняется компиляция ссылки на экземпляр шаблон функции "void ArraySequence<int>::InsertAt(T,const size_t)"
+          with
+          [
+              T=int
+          ]
+C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\Sequence.h(85,1): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\Sequence.h(84): message : во время компиляции функции-члена класс шаблон "void ArraySequence<int>::Prepend(T)"
+          with
+          [
+              T=int
+          ]
+C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\Sequence.h(255,1): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\Sequence.h(249): message : во время компиляции функции-члена класс шаблон "Sequence<T> *LinkedListSequence<T>::Concat(Sequence<T> *)"
+          with
+          [
+              T=Item<std::pair<int,int>>
+          ]
+C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\PriorityQueue.h(77): message : выполняется компиляция ссылки на экземпляр класс шаблон функции "LinkedListSequence<Item<T>>"
+          with
+          [
+              T=std::pair<int,int>
+          ]
+C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\PriorityQueue.h(76): message : во время компиляции функции-члена класс шаблон "PriorityQueue<std::pair<int,int>>::~PriorityQueue(void)"
+C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\Homoku.h(517): message : выполняется компиляция ссылки на экземпляр шаблон функции "PriorityQueue<std::pair<int,int>>::~PriorityQueue(void)"
+C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\Homoku.h(517): message : выполняется компиляция ссылки на экземпляр класс шаблон функции "PriorityQueue<std::pair<int,int>>"
+C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\Sequence.h(238,1): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\Sequence.h(237): message : во время компиляции функции-члена класс шаблон "Sequence<T> *LinkedListSequence<T>::GetSubSequence(const size_t,const size_t)"
+          with
+          [
+              T=Item<std::pair<int,int>>
+          ]
+C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\Sequence.h(243,1): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+  homoku.vcxproj -> C:\Raul\programming\cpp\Homoku\cpp\homoku\x64\Debug\homoku.exe

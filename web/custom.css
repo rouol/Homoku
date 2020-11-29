@@ -1,0 +1,145 @@
+body
+{
+    position: relative;
+    background-color: #ffffff;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 1600 800'%3E%3Cg %3E%3Cpolygon fill='%23cce5ff' points='1600 160 0 460 0 350 1600 50'/%3E%3Cpolygon fill='%2399caff' points='1600 260 0 560 0 450 1600 150'/%3E%3Cpolygon fill='%2366b0ff' points='1600 360 0 660 0 550 1600 250'/%3E%3Cpolygon fill='%233395ff' points='1600 460 0 760 0 650 1600 350'/%3E%3Cpolygon fill='%23007bff' points='1600 800 0 800 0 750 1600 450'/%3E%3C/g%3E%3C/svg%3E");
+    background-attachment: fixed;
+    background-size: cover;
+    width: 100%;
+    padding-bottom: 50px;
+    padding-top: 50px;
+}
+
+.container-md
+{
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    width: 100%;
+}
+
+.zero-padding {
+    padding: 0px !important;
+  }
+
+.m20 {
+    margin: 20px;
+}
+
+
+.m10 {
+    margin: 10px;
+}
+
+.m05 {
+    margin: 5px;
+}
+
+.align-items-center {
+    display: flex; 
+    align-items: center;  /*Aligns vertically center */
+    justify-content: center; /*Aligns horizontally center */
+  }
+
+.remove {
+    
+}
+
+.btn-ch{
+
+}
+
+.semiopacity {
+    opacity: 1.0; /* Полупрозрачный фон */
+    filter: alpha(Opacity=50); /* Прозрачность в IE */
+}
+
+.texted {
+    font-size: 16pt;
+}
+
+input[type=checkbox]
+{
+  /* Double-sized Checkboxes */
+  -ms-transform: scale(2.5); /* IE */
+  -moz-transform: scale(2.5); /* FF */
+  -webkit-transform: scale(2.5); /* Safari and Chrome */
+  -o-transform: scale(2.5); /* Opera */
+  transform: scale(2.5);
+  padding: 10px;
+}
+
+/* Might want to wrap a span around your checkbox text */
+.checkboxtext
+{
+  /* Checkbox text */
+  font-size: 110%;
+  display: inline;
+}
+
+/*
+table {
+  background-color: white;
+}
+td {
+  width: 5.26%;
+  height: 5.26%;
+  position: relative;
+}
+td:after {
+  content: '';
+  display: block;
+  margin-top: 100%;
+}
+td .content {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+*/
+
+.square {
+  background: #ffffff;
+  width: 40vw;
+  height: 40vw;
+}
+
+table {
+  table-layout: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+}
+/*
+tr {
+  height: 1vw;
+  width: 1vw;
+}
+*/
+td {
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap; 
+  font-size: 1.33vw;
+  /*
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+  */
+}
+
+.fit {
+  width: 40vw;
+  height: 40vw;
+  white-space: nowrap;
+}
+.fit td {
+  width: 2.0vw;
+  height: 2.0vw;
+  overflow:hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
