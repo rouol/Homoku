@@ -6,7 +6,13 @@ ip = local_ip;
 var TABLE = [[]];
 const blackDot = '&#9899;';
 const whiteDot = '&#9898;';
+var gameStart = false;
 var sideCount = 1;
+var player = 1;
+var lastCellID = 0;
+var lastStatus = 0;
+var winner = 0;
+var gameID = 0;
 //-------------------------------------------------------
 
 // UI functions
@@ -16,7 +22,7 @@ function getTable(data) {
     data.forEach(function(row, i, data) {
         result.push('<tr>');
         row.forEach(function(cell, j, row) {
-            cellID = i + '/' + j;
+            cellID = i + 'X' + j;
             result.push(`<td id="${cellID}">${cell}</td>`);
         });
         result.push('</tr>');
@@ -40,15 +46,27 @@ function makeTable(){
     jQuery("#TABLE").append(htmlTABLE);
 }
 
+function clearTable(){
+    jQuery("#TABLE").empty();
+    makeTable();
+}
+
 function makeMove(x, y){
-    cellID = x.toString() + '/' + y.toString();
+    cellID = x.toString() + 'X' + y.toString();
     if (document.getElementById(cellID).innerHTML == ''){
         if (sideCount == 1){
             document.getElementById(cellID).innerHTML = blackDot;
         } else {
             document.getElementById(cellID).innerHTML = whiteDot;
         }
+        //jQuery('#' + lastCellID).removeClass('bg-danger');
+        //jQuery('#' + lastCellID).removeClass('rounded');
+        jQuery('#' + cellID).addClass('bg-danger');
+        jQuery('#' + cellID).addClass('rounded-lg');
+        //jQuery('#' + cellID).delay(3000).removeClass('bg-danger');
+        //jQuery('#' + cellID).delay(3000).removeClass('rounded');
         sideCount = -sideCount
+        lastCellID = cellID;
     } else {
         alert('ошибка на сервере');
     }
@@ -60,30 +78,77 @@ jQuery(function(){
     $('.fit td').css('max-width', fit_width + 'px');
     makeTable()
 
+    jQuery('#startGame').click(function(){
+        clearTable()
+        startGame(player);
+    });
+    jQuery('#black').click(function(){
+        player = 1;
+        jQuery('#playerDropdown').html(jQuery('#black').html());
+    });
+    jQuery('#white').click(function(){
+        player = -1;
+        jQuery('#playerDropdown').html(jQuery('#white').html());
+    });
+
     // step processing
     $(document).on('click', 'td', function(){
-        if (this.innerHTML == ''){
-            if (sideCount == 1){
-                this.innerHTML = blackDot;
+        if (gameStart == true){
+            if (this.innerHTML == ''){
+                jQuery('#' + lastCellID).removeClass('bg-danger');
+                jQuery('#' + lastCellID).removeClass('rounded-lg');
+                if (sideCount == 1){
+                    this.innerHTML = blackDot;
+                } else {
+                    this.innerHTML = whiteDot;
+                }
+                sideCount = -sideCount
+                sepIndex = this.id.indexOf("X");
+                x = this.id.slice(0, sepIndex);
+                y = this.id.slice(sepIndex + 1);
+                processMove(x, y);
             } else {
-                this.innerHTML = whiteDot;
+                alert('такх, поле занято');
             }
-            sideCount = -sideCount
-            sepIndex = this.id.indexOf("/");
-            x = this.id.slice(0, sepIndex);
-            y = this.id.slice(sepIndex + 1);
-            processMove(x, y);
-        } else {
-            alert('такх, поле занято');
-        }
+        } else alert('начните игру');
+        
     });
 });
 
 // process functions
-function processMove(x, y){
-    //alert(x + y);
+function startGame(player){
     data = {
-        //'requestType': 0,
+        'requestType': 0,
+        'player': player
+    }
+    jQuery.post(
+        'http://' + ip + ':5100',
+        data,
+        successStart
+    );
+}
+
+function successStart(data){
+    ReceivedData = JSON.parse(data);
+    sideCount = 1;
+    if (player == -1){
+        x = ReceivedData[0];
+        y = ReceivedData[1];
+        gameID = ReceivedData[2];
+        makeMove(x, y);
+    } else {gameID = ReceivedData;}
+    
+    if (lastStatus == 0) jQuery('#maininput').removeClass('bg-dark');
+    else if (lastStatus == 1) jQuery('#maininput').removeClass('bg-success');
+    else if (lastStatus == 2) jQuery('#maininput').removeClass('bg-danger');
+    jQuery('#maininput').addClass('bg-primary');
+    gameStart = true;
+}
+
+function processMove(x, y){
+    data = {
+        'requestType': 1,
+        'id': gameID,
         'x': x,
         'y': y
     }
@@ -95,54 +160,37 @@ function processMove(x, y){
 }
 
 function successMove(data){
-    workingSpinnerSort(false);
     ReceivedData = JSON.parse(data);
-    x = ReceivedData[0];
-    y = ReceivedData[1];
-    makeMove(x, y);
-}
-
-
-//-----------------------------------------
-function workingSpinnerSort(state) {
-    if (state){
-        //add alert
-        //var success_alert_html = jQuery('<div id="success_alert" class="alert alert-warning text_center m10" role="alert">ОБРАБОТКА</div>');
-        //jQuery(".code").prepend(success_alert_html);
-        //add spinner to button
-        var spinner_html = '<div class="spinner-border text-light" role="status"><span class="sr-only" style="font-size: 100vw">Loading...</span></div>';
-        jQuery("#Sort").text("");
-        jQuery("#Sort").append(spinner_html);
-    } else{
-        //jQuery("#success_alert").delay(500).fadeOut(100);
-        jQuery("#Sort").empty();
-        jQuery("#Sort").text("Отсортировать");
+    if (ReceivedData.length == 3) {
+        winner = ReceivedData[2];
     }
-}
-
-function successAlertSort(time) {
-    //add alert
-    // style="text-align:start; vertical-align: center; height: 2.35em;"
-    jQuery("#success_alert").remove();
-    var success_alert_html = jQuery('<div id="success_alert" class="text-white mx-3 mt-2"><h6>выполнено за ' + time + ' мс</h6></div>');
-    jQuery("#btnGroupSort").append(success_alert_html);
-    jQuery("#success_alert").delay(3000).fadeOut(500);
-    setTimeout(function() {
-        jQuery("#success_alert").remove();
-    }, 3500);
-}
-
-function workingSpinnerCompareSort(state) {
-    if (state){
-        //add spinner to button
-        var spinner_html = '<div class="spinner-border text-primary" role="status"><span class="sr-only" style="font-size: 100vw">Loading...</span></div>';
-        jQuery("#Compare").text("");
-        jQuery("#Compare").append(spinner_html);
-    } else{
-        //jQuery("#success_alert").delay(500).fadeOut(100);
-        jQuery("#Compare").empty();
-        jQuery("#Compare").text("Построить графики");
+    if (ReceivedData[0] != -1) {
+        x = ReceivedData[0];
+        y = ReceivedData[1];
+        makeMove(x, y);
+    } else {alert('сдаюсь...');}
+    if (winner == 1) {
+        // win of black
+        alert('черные победили');
+    } else if (winner == -1) {
+        // win of white
+        alert('белые победили');
     }
+    if (winner != 0) {
+        if (winner == player){
+            jQuery('#maininput').removeClass('bg-primary');
+            jQuery('#maininput').addClass('bg-success');
+            lastStatus = 1;
+        } else {
+            jQuery('#maininput').removeClass('bg-primary');
+            jQuery('#maininput').addClass('bg-danger');
+            lastStatus = 2;
+        }
+        gameStart = false;
+        winner = 0;
+        sideCount = player;
+    }
+    
 }
 
 // Utility functions

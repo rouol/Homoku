@@ -21,23 +21,22 @@ public:
 
 	// functions -----------------------------------------------------------
 	void Insert(T item, int priority) {
+		Item<T> newItem = Item<T>();
+		newItem.item = item;
+		newItem.priority = priority;
 		if (list->GetLength() == 0) {
-			Item<T> newItem = Item<T>();
-			newItem.item = item;
-			newItem.priority = priority;
 			list->Append(newItem);
 			return;
 		}
 		for (int i = 0; i < list->GetLength(); i++) {
 			Item<T> currentItem = list->Get(i);
 			if (priority >= currentItem.priority) {
-				Item<T> newItem = Item<T>();
-				newItem.item = item;
-				newItem.priority = priority;
 				list->InsertAt(newItem, i);
 				return;
 			}
 		}
+		list->Append(newItem);
+		return;
 	}
 
 	void IsEmpty() {

@@ -4,9 +4,23 @@
 #include <math.h>
 #include "Homoku.h"
 #include <omp.h>
+#include <cstdlib>
 
 int main()
 {
+    /*
+    PriorityQueue<int> pQ = PriorityQueue<int>();
+    for (int i = 10; i > 0; i--) {
+        int x = std::rand();
+        std::cout << x << std::endl;
+        pQ.Insert(x, x);
+    }
+    std::cout << "---------"<< std::endl;
+    for (int i = 0; i < pQ.GetLength(); i++) {
+        std::cout << pQ.GetItem(i).item << std::endl;
+    }
+    */
+
     ///*
     // make Game Map
     //GameBoard gameMatrix = GameBoard(Position::HEIGHT, ArraySequence<int>(Position::WIDTH, 0));
@@ -53,7 +67,7 @@ int main()
     */
     int x, y;
 
-    ///*
+    /*
     
     int movesCounter = 0;
     while (true) {
@@ -77,18 +91,20 @@ int main()
             }
         }
         else {
-            ArraySequence<int> AImove = negamax(position, /*searchPattern,*/ 0, 0, 100);
+            //ArraySequence<int> AImove = negamax(position, searchPattern, 0, 0, 100);
+            ArraySequence<int> AImove = negamax(position, 0, 0, 100);
             x = AImove[0];
             y = AImove[1];
             position.move(x, y);
         }
         movesCounter++;
     }
-    //*/
+    */
 
     /*
     
     int movesCounter = 0;
+    ArraySequence<int> AImove;
     while (true)
     {
         std::cin >> x >> y;
@@ -109,14 +125,82 @@ int main()
             }
         }
         else {
-            ArraySequence<int> AImove = negamax(position, searchPattern, 0, 0, 100);
+            //ArraySequence<int> AImove = negamax(position, searchPattern, 0, 0, 100);
+            AImove = negamax(position, 0, 0, 100);
             x = AImove[0];
             y = AImove[1];
             position.move(AImove[0], AImove[1]);
+            if (AImove[2] > 1000) {
+                std::cout << -2 << ' ' << -2 << std::endl;
+                break;
+            }
         }
         movesCounter++;
 
         std::cout << x << ' ' << y << std::endl;
     }
     */
+
+    // get config
+    int player; // human's player
+    std::cin >> player;
+
+    bool win = false;
+    int winner = 0;
+
+    int movesCounter = 0;
+    if (player == -1) {
+        x = ((int)floor(Position::HEIGHT / 2.0));
+        y = ((int)floor(Position::HEIGHT / 2.0));
+        position.move(x, y);
+        std::cout << x << ' ' << y << std::endl;
+        movesCounter++;
+    }
+    ArraySequence<int> AImove;
+    while (true)
+    {
+        std::cin >> x >> y;
+
+        if (position.canMove(x, y)) {
+            if (position.evalMove(x, y) > 1000) {
+                win = true;
+                winner = player;
+                std::cout << -1 << ' ' << -1 << " " << winner << std::endl;
+                break;
+            }
+            else {
+                position.move(x, y);
+            }
+        }
+        if (movesCounter == 0) {
+            x = ((int)floor(Position::HEIGHT / 2.0));
+            y = ((int)floor(Position::HEIGHT / 2.0));
+            if (position.canMove(x, y)) {
+                position.move(x, y);
+            }
+            else {
+                x--;
+                y++;
+                position.move(x, y);
+            }
+        }
+        else {
+            //ArraySequence<int> AImove = negamax(position, searchPattern, 0, 0, 100);
+            AImove = negamax(position, 0, 0, 100);
+            //AImove = MCTS(position, 0);
+            x = AImove[0];
+            y = AImove[1];
+            if (position.evalMove(x, y) > 1000) {
+                win = true;
+                winner = -player;
+            }
+            position.move(AImove[0], AImove[1]);
+            
+        }
+        movesCounter++;
+        if (win) {
+            std::cout << x << ' ' << y << " " << winner << std::endl;
+        }
+        std::cout << x << ' ' << y << std::endl;
+    }
 }

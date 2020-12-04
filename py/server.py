@@ -6,12 +6,40 @@ import random
 from subprocess import Popen, PIPE
 import os
 
-cpp_process = None
+processMap = {}
+
+
+def generateProcessID():
+    new_id = random.randint(0, 100000)
+    while new_id in processMap:
+        new_id = random.randint(0, 100000)
+    return new_id
+
+
+def startGame(data):
+    global processMap
+    cpp_process = Popen(['..\cpp\homoku.exe'], shell=True, stdout=PIPE, stdin=PIPE)
+    process_id = generateProcessID()
+
+    # send player
+    player = int(data['player'][0])
+    value = str(player) + '\n'
+    value = bytes(value, 'UTF-8')  # Needed in Python 3.
+    cpp_process.stdin.write(value)
+    cpp_process.stdin.flush()
+    if player == -1:
+        answer = list(map(int, cpp_process.stdout.readline().strip().decode('utf-8').split()))
+        answer.append(process_id)
+    else:
+        answer = process_id
+    processMap[process_id] = [cpp_process, player]
+    return answer
 
 
 def makeMove(data):
-    global cpp_process
-
+    global processMap
+    process_id = int(data['id'][0])
+    cpp_process = processMap[process_id][0]
     # send x, y
     value = data['x'][0] + ' ' + data['y'][0] + '\n'
     value = bytes(value, 'UTF-8')  # Needed in Python 3.
@@ -19,7 +47,12 @@ def makeMove(data):
     cpp_process.stdin.flush()
 
     answer = list(map(int, cpp_process.stdout.readline().strip().decode('utf-8').split()))
-    print(answer)
+    if len(answer) == 3:
+        Popen.kill(cpp_process)
+        del processMap[process_id]
+    if len(answer) == 0:
+        player = processMap[process_id][1]
+        answer = [-1, -1, player]
     return answer
 
 
@@ -49,28 +82,22 @@ class S(BaseHTTPRequestHandler):
         # print(post_data.decode('utf-8'))
 
         self._set_response()
-        '''
+        answer = 0
+        process_id = 'start'
         if data['requestType'][0] == '0':
-            answer = Sort(data)
+            answer = startGame(data)
         elif data['requestType'][0] == '1':
-            answer = CompareSort(data)
-        '''
-        '''
-        answer = {'x': random.randint(0, 19),
-                  'y': random.randint(0, 19)}
-        '''
-        answer = makeMove(data)
+            process_id = int(data['id'][0])
+            answer = makeMove(data)
+        print(process_id, answer)
         json_string = json.dumps(answer)
-        # print('json')
-        # print(json_string.encode(encoding='utf_8'))
         self.wfile.write(json_string.encode(encoding='utf_8'))
-        # self.wfile.write("POST request for {}".format(self.path).encode('utf-8'))
 
 
 def run(server_class=HTTPServer, handler_class=S, port=5100):
     # run C++ session
-    global cpp_process
-    cpp_process = Popen(['..\cpp\homoku.exe'], shell=True, stdout=PIPE, stdin=PIPE)
+    # global cppProcess
+    # cpp_process = Popen(['..\cpp\homoku.exe'], shell=True, stdout=PIPE, stdin=PIPE)
 
     logging.basicConfig(level=logging.INFO)
     server_address = ('', port)

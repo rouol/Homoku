@@ -16,23 +16,32 @@
     </head>
 
     <body>
-        <div id="back_container" class="background_animation">
+        <!--<div id="back_container" class="background_animation">-->
             <div class="container-fluid">
                 <!--            main            -->
                 <div class="container">
                 
                     <!--            logo            -->
-                    <!--<div class="row mx-auto"><h1>Гомоку</h1></div>-->
+                    <div class="row mx-auto justify-content-center">
+                        <h1>Гомоку</h1>
+                    </div>
                     
                     <!--            input frame            -->
                     <div class="row">
                         <div class="p-0 mx-auto">
                             <!--            main input frame            -->
-                            <div class="shadow p-1 rounded bg-primary justify-content-center" id="maininput">
+                            <div class="shadow p-1 rounded bg-dark justify-content-center" id="maininput">
                                 <div class="row p-1 m-1">
                                     <button type="button" class="btn btn-outline-primary bg-light mr-1 shadow" id="startGame">начать</button>
-                                    <button type="button" class="btn btn-outline-primary bg-light mr-1 shadow" id="ssss">чето еще</button>
-                                    <button type="button" class="btn btn-outline-primary bg-light mr-1 shadow" id="sssss">чето еще</button>
+                                    <div class="dropdown mr-1 shadow">
+                                        <button class="btn btn-outline-primary bg-light dropdown-toggle" type="button" id="playerDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                          Выберите цвет
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                          <a class="dropdown-item" href="#" id="black">Черные</a>
+                                          <a class="dropdown-item" href="#" id="white">Белые</a>
+                                        </div>
+                                      </div>
                                 </div>
                                 <div class="row rounded shadow p-1 m-2" style="background-color: white;">
                                     <div class="col-12 p-0 m-0 square" id="TABLE">
@@ -49,7 +58,7 @@
                     <div class="col-12 code"></div>
                 </div>
             </div>
-        </div>
+        <!--</div>-->
 
         <!--            credits           -->
         <div class="container-fluid" id="credits" style="position:absolute; bottom:0; width:100%;">

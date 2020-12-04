@@ -119,6 +119,7 @@ T& LinkedList<T>::Get(size_t index) const
 	if (this->count <= index) {
 		throw std::exception("IndexOutOfRangeException");
 	}
+	else if (index == 0) { return this->data->data;  }
 	else {
 		Node<T>* tempHead = this->data;
 		for (int i = 0; i < index; i++) {
@@ -181,7 +182,7 @@ void LinkedList<T>::InsertAt(const T& item, size_t index)
 		}
 		else {
 			Node<T>* tempHead = this->data; // head is not NULL
-			for (int i = 0; i < index; i++) {
+			for (int i = 0; i < index - 1; i++) {
 				tempHead = tempHead->next; // go to index
 			}
 			temp->next = tempHead->next; // linking temp to next
@@ -248,6 +249,7 @@ void LinkedList<T>::RemoveAt(size_t index)
 			Node<T>* old = this->data;
 			this->data = old->next;
 			delete old;
+			this->count--;
 			return;
 		}
 		Node<T>* tempHead = this->data; // head is not NULL

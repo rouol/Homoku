@@ -7,7 +7,8 @@
 /**
  * Const values for Gomoku.
  */
-static const int MAX_DEPTH = 4;
+static const int MAX_DEPTH = 3;
+static const int MAX_DEPTH_MCTS = 9;
 
 /**
  * A gameBoard storing a Gomoku Board.
@@ -74,134 +75,8 @@ public:
     int evalMove(int x, int y) const {
 
         // check 5 in a row in every direction
-        /*
-        int horizontal1 = 0;
-        int horizontal2 = 0;
-        int vertical1 = 0;
-        int vertical2 = 0;
-        int diagonal11 = 0;
-        int diagonal12 = 0;
-        int diagonal21 = 0;
-        int diagonal22 = 0;
-        int current = currentPlayer;
-        #pragma omp parallel sections //shared(horizontal, vertical, diagonal1, diagonal2)
-        {
-            //horizontal
-            #pragma omp section
-            {
-                //right
-                int i1 = 0;
-                while (gameBoard[x][y + i1] == current or i1 == 0) {
-                    i1++;
-                    horizontal1++;
-                    if (i1 <= 5 and y + i1 < HEIGHT) {
-                        continue;
-                    }
-                    else break;
-                }
-                if (i1 == 5) return 10000 - nMoves - 1;
-            }
-            #pragma omp section
-            {
-                //left
-                int i2 = 0;
-                while (gameBoard[x][y - i2] == current or i2 == 0) {
-                    i2++;
-                    horizontal2++;
-                    if (i2 <= 5 and y - i2 >= 0) {
-                        continue;
-                    }
-                    else break;
-                }
-                if (i2 == 5) return 10000 - nMoves - 1;
-            }
-            //vertical
-            #pragma omp section
-            {
-                //down
-                int i3 = 0;
-                while (gameBoard[x + i3][y] == current or i3 == 0) {
-                    i3++;
-                    vertical1++;
-                    if (i3 <= 5 and x + i3 < HEIGHT) {
-                        continue;
-                    }
-                    else break;
-                }
-                if (i3 == 5) return 10000 - nMoves - 1;
-            }
-            #pragma omp section
-            {
-                //up
-                int i4 = 0;
-                while (gameBoard[x - i4][y] == current or i4 == 0) {
-                    i4++;
-                    vertical2++;
-                    if (i4 <= 5 and x - i4 >= 0) {
-                        continue;
-                    }
-                    else break;
-                }
-                if (i4 == 5) return 10000 - nMoves - 1;
-            }
-            //diagonal1 NE-SW
-            #pragma omp section
-            {
-                int i5 = 0;
-                while (gameBoard[x + i5][y + i5] == current or i5 == 0) {
-                    i5++;
-                    diagonal11++;
-                    if (i5 <= 5 and x + i5 < HEIGHT and y + i5 < HEIGHT) {
-                        continue;
-                    }
-                    else break;
-                }
-                if (i5 == 5) return 10000 - nMoves - 1;
-            }
-            #pragma omp section
-            {
-                int i6 = 0;
-                while (gameBoard.Get(x - i6).Get(y - i6) == current or i6 == 0) {
-                    i6++;
-                    diagonal12++;
-                    if (i6 <= 5 and x - i6 >= 0 and y - i6 >= 0) {
-                        continue;
-                    }
-                    else break;
-                }
-                if (i6 == 5) return 10000 - nMoves - 1;
-            }
-            //diagonal2 NW-SE
-            #pragma omp section
-            {
-                int i7 = 0;
-                while (gameBoard[x - i7][y + i7] == current or i7 == 0) {
-                    i7++;
-                    diagonal21++;
-                    if (i7 <= 5 and x - i7 >= 0 and y + i7 < HEIGHT) {
-                        continue;
-                    }
-                    else break;
-                }
-                if (i7 == 5) return 10000 - nMoves - 1;
-            }
-            #pragma omp section
-            {
-                int i8 = 0;
-                while (gameBoard[x + i8][y - i8] == current or i8 == 0) {
-                    i8++;
-                    diagonal22++;
-                    if (i8 <= 5 and x + i8 < HEIGHT and y - i8 >= 0) {
-                        continue;
-                    }
-                    else break;
-                }
-                if (i8 == 5) return 10000 - nMoves - 1;
-            }
-        }// omp sections
-        */
         
-        ///*
+        /*
         //horizontal
         //right
         int horizontal = 0;
@@ -214,7 +89,7 @@ public:
             }
             else break;
         }
-        if (i1 == 5) return 10000 - 1;
+        if (i1 == 5) return 10000;
         //left
         int i2 = 0;
         while (gameBoard[x][y - i2] == currentPlayer or i2 == 0) {
@@ -225,7 +100,8 @@ public:
             }
             else break;
         }
-        if (i2 == 5) return 10000 - 1;
+        if (i2 == 5) return 10000;
+        if (horizontal == 6) return 10000;
 
         //vertical
         //down
@@ -239,7 +115,7 @@ public:
             }
             else break;
         }
-        if (i3 == 5) return 10000 - 1;
+        if (i3 == 5) return 10000;
         //up
         int i4 = 0;
         while (gameBoard[x - i4][y] == currentPlayer or i4 == 0) {
@@ -250,7 +126,8 @@ public:
             }
             else break;
         }
-        if (i4 == 5) return 10000 - 1;
+        if (i4 == 5) return 10000;
+        if (vertical == 6) return 10000;
 
         //diagonal1 NE-SW
         int diagonal1 = 0;
@@ -263,7 +140,7 @@ public:
             }
             else break;
         }
-        if (i5 == 5) return 10000 - 1;
+        if (i5 == 5) return 10000;
         int i6 = 0;
         while (gameBoard[x - i6][y - i6] == currentPlayer or i6 == 0) {
             i6++;
@@ -273,7 +150,8 @@ public:
             }
             else break;
         }
-        if (i6 == 5) return 10000 - 1;
+        if (i6 == 5) return 10000;
+        if (diagonal1 == 6) return 10000;
 
         //diagonal2 NW-SE
         int diagonal2 = 0;
@@ -286,7 +164,7 @@ public:
             }
             else break;
         }
-        if (i7 == 5) return 10000 - 1;
+        if (i7 == 5) return 10000;
         int i8 = 0;
         while (gameBoard[x + i8][y - i8] == currentPlayer or i8 == 0) {
             i8++;
@@ -296,11 +174,244 @@ public:
             }
             else break;
         }
-        if (i8 == 5) return 10000 - 1;
-        //*/
+        if (i8 == 5) return 10000;
+        if (diagonal2 == 6) return 10000;
+        
 
-        //return std::max({ horizontal - 1, vertical - 1, diagonal1 - 1, diagonal2 - 1 });
-        return std::pow(3, horizontal - 2) + std::pow(3, vertical - 2) + std::pow(3, diagonal1 - 2) + std::pow(3, diagonal2 - 2) - 1;
+        //return std::max({ horizontal, vertical, diagonal1, diagonal2 });
+        return std::pow(3, horizontal - 2) + std::pow(3, vertical - 2) + std::pow(3, diagonal1 - 2) + std::pow(3, diagonal2 - 2);
+        */
+        
+
+        ArraySequence<int> opens = ArraySequence<int>(4, 0);
+        ArraySequence<int> is = ArraySequence<int>(8, 0);
+        ArraySequence<int> js = ArraySequence<int>(8, 0);
+
+        ///*
+        //horizontal
+        //right
+        //count same symbol
+        //int horizontal = 0;
+        while (gameBoard[x][y + is[0]] == currentPlayer or is[0] == 0) {
+            is[0]++;
+            //horizontal++;
+            if (is[0] <= 5 and y + is[0] < HEIGHT) {
+                continue;
+            }
+            else break;
+        }
+        //if (is[0] == 5) return 10000;
+        //count zeros
+        js[0] = is[0];
+        while (gameBoard[x][y + js[0]] == 0) {
+            js[0]++;
+            if (js[0] <= 5 and y + js[0] < HEIGHT) {
+                continue;
+            }
+            else break;
+        }
+        //left
+        while (gameBoard[x][y - is[1]] == currentPlayer or is[1] == 0) {
+            is[1]++;
+            //horizontal++;
+            if (is[1] <= 5 and y - is[1] >= 0) {
+                continue;
+            }
+            else break;
+        }
+        //count zeros
+        js[1] = is[1];
+        while (gameBoard[x][y - js[1]] == 0) {
+            js[1]++;
+            if (js[1] <= 5 and y - js[1] >= 0) {
+                continue;
+            }
+            else break;
+        }
+        //if (is[1] == 5) return 10000;
+        int horizontal = is[0] + is[1] - 2;
+        if (horizontal == 4) return 10000;
+        else if (horizontal + js[0] + js[1] < 4) {
+            // means can't get 5 from it
+            horizontal = 0;
+        }
+        else if (horizontal + js[0] + js[1] == 4) {
+            // means closed
+            //horizontal--;
+            //bonus = 1;
+            //fee == 5;
+        }
+        else {
+            //bonus++;
+            opens[0] = 1;
+        }
+
+        //vertical
+        //down
+        //int vertical = 0;
+        while (gameBoard[x + is[2]][y] == currentPlayer or is[2] == 0) {
+            is[2]++;
+            //vertical++;
+            if (is[2] <= 5 and x + is[2] < HEIGHT) {
+                continue;
+            }
+            else break;
+        }
+        js[2] = is[2];
+        while (gameBoard[x + js[2]][y] == 0) {
+            js[2]++;
+            if (js[2] <= 5 and x + js[2] < HEIGHT) {
+                continue;
+            }
+            else break;
+        }
+        //if (is[2] == 5) return 10000;
+        //up
+        while (gameBoard[x - is[3]][y] == currentPlayer or is[3] == 0) {
+            is[3]++;
+            //vertical++;
+            if (is[3] <= 5 and x - is[3] >= 0) {
+                continue;
+            }
+            else break;
+        }
+        js[3] = is[3];
+        while (gameBoard[x - js[3]][y] == 0) {
+            js[3]++;
+            if (js[3] <= 5 and x - js[3] >= 0) {
+                continue;
+            }
+            else break;
+        }
+        //if (is[3] == 5) return 10000;
+        int vertical = is[2] + is[3] - 2;
+        if (vertical == 4) return 10000;
+        else if (vertical + js[2] + js[3] < 4) {
+            // means can't get 5 from it
+            vertical = 0;
+        }
+        else if (vertical + js[2] + js[3] == 4) {
+            // means closed
+            //vertical--;
+            //bonus = 1;
+            //fee == 5;
+        }
+        else {
+            //bonus++;
+            opens[1] = 1;
+        }
+
+        //diagonal1 NE-SW
+        //int diagonal1 = 0;
+        while (gameBoard[x + is[4]][y + is[4]] == currentPlayer or is[4] == 0) {
+            is[4]++;
+            //diagonal1++;
+            if (is[4] <= 5 and x + is[4] < HEIGHT and y + is[4] < HEIGHT) {
+                continue;
+            }
+            else break;
+        }
+        js[4] = is[4];
+        while (gameBoard[x + js[4]][y + js[4]] == 0) {
+            js[4]++;
+            if (js[4] <= 5 and x + js[4] < HEIGHT and y + js[4] < HEIGHT) {
+                continue;
+            }
+            else break;
+        }
+        //if (is[4] == 5) return 10000;
+        while (gameBoard[x - is[5]][y - is[5]] == currentPlayer or is[5] == 0) {
+            is[5]++;
+            //diagonal1++;
+            if (is[5] <= 5 and x - is[5] >= 0 and y - is[5] >= 0) {
+                continue;
+            }
+            else break;
+        }
+        js[5] = is[5];
+        while (gameBoard[x - js[5]][y - js[5]] == 0) {
+            js[5]++;
+            if (js[5] <= 5 and x - js[5] >= 0 and y - js[5] >= 0) {
+                continue;
+            }
+            else break;
+        }
+        //if (is[5] == 5) return 10000;
+        int diagonal1 = is[4] + is[5] - 2;
+        if (diagonal1 == 4) return 10000;
+        else if (diagonal1 + js[4] + js[5] < 4) {
+            // means can't get 5 from it
+            diagonal1 = 0;
+        }
+        else if (diagonal1 + js[4] + js[5] == 4) {
+            // means closed
+            //diagonal1--;
+            //bonus = 1;
+            //fee == 5;
+        }
+        else {
+            //bonus++;
+            opens[2] = 1;
+        }
+
+        //diagonal2 NW-SE
+        //int diagonal2 = 0;
+        while (gameBoard[x - is[6]][y + is[6]] == currentPlayer or is[6] == 0) {
+            is[6]++;
+            //diagonal2++;
+            if (is[6] <= 5 and x - is[6] >= 0 and y + is[6] < HEIGHT) {
+                continue;
+            }
+            else break;
+        }
+        js[6] = is[6];
+        while (gameBoard[x - js[6]][y + js[6]] == 0) {
+            js[6]++;
+            if (js[6] <= 5 and x - js[6] >= 0 and y + js[6] < HEIGHT) {
+                continue;
+            }
+            else break;
+        }
+        //if (is[6] == 5) return 10000;
+        while (gameBoard[x + is[7]][y - is[7]] == currentPlayer or is[7] == 0) {
+            is[7]++;
+            //diagonal2++;
+            if (is[7] <= 5 and x + is[7] < HEIGHT and y - is[7] >= 0) {
+                continue;
+            }
+            else break;
+        }
+        js[7] = is[7];
+        while (gameBoard[x + js[7]][y - js[7]] == 0) {
+            js[7]++;
+            if (js[7] <= 5 and x + js[7] < HEIGHT and y - js[7] >= 0) {
+                continue;
+            }
+            else break;
+        }
+        //if (is[7] == 5) return 10000;
+        int diagonal2 = is[6] + is[7] - 2;
+        if (diagonal2 == 4) return 10000;
+        else if (diagonal2 + js[6] + js[7] < 4) {
+            // means can't get 5 from it
+            diagonal2 = 0;
+        }
+        else if (diagonal2 + js[6] + js[7] == 4) {
+            // means closed
+            //diagonal2--;
+            //bonus = 1;
+            //fee == 5;
+        }
+        else {
+            //bonus++;
+            opens[3] = 1;
+        }
+
+        // check crosses
+        //if ()
+
+        //return std::max({ horizontal, vertical, diagonal1, diagonal2 });
+        return std::pow(3, horizontal) + std::pow(3, vertical) + std::pow(3, diagonal1) + std::pow(3, diagonal2);// +bonus;
     }
 
     /**
@@ -444,10 +555,10 @@ ArraySequence<int> negamax(const Position position, /* MatrixInt searchPattern,*
         //return position.score(); 
         //return ArraySequence<int>(3, 0);
 
-    int max = 90 - depth - 1;	// upper bound of our score as we cannot win immediately
+    int max = 81 - depth;	// upper bound of our score as we cannot win immediately
     if (beta > max) {
         beta = max;                     // there is no need to keep beta above our max possible score.
-        if (alpha >= beta) return alpha;  // prune the exploration if the [alpha;beta] window is empty.
+        if (alpha >= beta) return beta;  // prune the exploration if the [alpha;beta] window is empty.
     }
 
     /*
@@ -514,72 +625,112 @@ ArraySequence<int> negamax(const Position position, /* MatrixInt searchPattern,*
     }
     */
 
-    PriorityQueue<std::pair<int, int>> scoreQueue = PriorityQueue<std::pair<int, int>>();
+    PriorityQueue<std::pair<int, int>> heuristicScoreQueue = PriorityQueue<std::pair<int, int>>();
+    //#pragma omp parallel for shared(position, heuristicScoreQueue)
     for (int x = 0; x < Position::HEIGHT; x++) {
         for (int y = 0; y < Position::WIDTH; y++) {
-            if (position.radius + 3 > std::max(std::abs(x - position.centerX), std::abs(y - position.centerY))) {
+            if (position.radius + 2 > std::max(std::abs(x - position.centerX), std::abs(y - position.centerY))) {
                 if (position.canMove(x, y)) {
                     std::pair<int, int> move = std::pair<int, int>(x, y);
-                    int eval = position.evalMove(x, y) - depth;
-                    scoreQueue.Insert(move, eval);
+                    int eval = position.evalMove(x, y);
+                    heuristicScoreQueue.Insert(move, eval);
                 }
             }
         }
     }
-    ///*
+    /*
     if (depth == 0) {
-        for (int i = 0; i < scoreQueue.GetLength(); i++)
-            std::cout << scoreQueue[i].item.first << " " << scoreQueue[i].item.second << " " << scoreQueue[i].priority << std::endl;
+        for (int i = 0; i < heuristicScoreQueue.GetLength(); i++)
+            std::cout << heuristicScoreQueue[i].item.first << " " << heuristicScoreQueue[i].item.second << " " << heuristicScoreQueue[i].priority << std::endl;
     }
-    //*/
+    */
     ArraySequence<int> bestMove = ArraySequence<int>(3, -100000);
     if (depth == MAX_DEPTH or position.nMoves < 5) {
-        Item<std::pair<int, int>> item = scoreQueue.GetHighestPriorityItem();
+        Item<std::pair<int, int>> item = heuristicScoreQueue.GetHighestPriorityItem();
         bestMove[0] = item.item.first;
         bestMove[1] = item.item.second;
-        bestMove[2] = item.priority;
+        bestMove[2] = item.priority - depth;
+        return bestMove;
     }
     else {
+        /*
         if (depth == 0) {
             std::cout << "--------------------------------------------------" << std::endl;
         }
-        for (int i = 0; i < scoreQueue.GetLength(); i++) {
-            Item<std::pair<int, int>> item = scoreQueue.GetHighestPriorityItem();
+        */
+        PriorityQueue<std::pair<int, int>> scoreQueue = PriorityQueue<std::pair<int, int>>();
+        //while (heuristicScoreQueue.GetLength() > 0) {
+        for (int i = 0; i < heuristicScoreQueue.GetLength(); i++) {
+            //Item<std::pair<int, int>> item = heuristicScoreQueue.GetHighestPriorityItem();
+            Item<std::pair<int, int>> item = heuristicScoreQueue.GetItem(i);
+            /*
             if (depth == 0) {
                 std::cout << item.item.first << " " << item.item.second << " " << item.priority << " ";
             }
+            /*
             if (depth == 1) {
-                std::cout << "d1--------------------------------------------------" << std::endl;
+                std::cout << "d1 --------------------------------------------------" << std::endl;
                 std::cout << item.item.first << " " << item.item.second << " " << item.priority << " ";
             }
+            */
             //check win
             if (item.priority > 1000) {
                 bestMove[0] = item.item.first;
                 bestMove[1] = item.item.second;
-                bestMove[2] = item.priority;
-                if (depth == 0) {
-                std::cout << std::endl;
-                }
-                break;
+                bestMove[2] = item.priority - depth;
+                return bestMove;
             }
             // check future
             Position newPosition = position;
             newPosition.move(item.item.first, item.item.second);
             int opEval = negamax(newPosition, depth + 1, alpha - 1, beta - 1)[2];
             int Eval = item.priority - opEval;
+            /*
             if (depth == 0) {
                 std::cout << Eval << std::endl;
             }
+            */
             if (Eval < -1000) {
-                scoreQueue.Delete();
+                //heuristicScoreQueue.Delete();
                 continue;
             }
             else {
+                if (depth == 0 and i == 0) {
+                    depth = MAX_DEPTH - 1;
+                }
+                if (Eval > alpha) { alpha = Eval; }
+                if (Eval >= beta) {
+                    bestMove[0] = item.item.first;
+                    bestMove[1] = item.item.second;
+                    bestMove[2] = Eval;
+                    return bestMove;
+                }
+                scoreQueue.Insert(item.item, item.priority);
+                /*
                 bestMove[0] = item.item.first;
                 bestMove[1] = item.item.second;
                 bestMove[2] = item.priority;
                 break;
+                */
             }
+            //heuristicScoreQueue.Delete();
+        }
+        if (scoreQueue.GetLength() == 0) {
+            // make lose sign
+            bestMove[0] = -1;
+            bestMove[1] = -1;
+            bestMove[2] = -10000;
+            return bestMove;
+        }
+        else
+        {
+            // get best move
+            Item<std::pair<int, int>> bestitem = scoreQueue.GetHighestPriorityItem();
+            bestMove[0] = bestitem.item.first;
+            bestMove[1] = bestitem.item.second;
+            bestMove[2] = bestitem.priority;
+
+            return bestMove;
         }
     }
 
@@ -595,7 +746,75 @@ ArraySequence<int> negamax(const Position position, /* MatrixInt searchPattern,*
                 std::cout << &scoreArray[i] << std::endl;
         std::cout << "best: " << &bestMove << '\t' << position.radius << std::endl;
     }
-    */
     return bestMove;
+    */
+    
 }
 //*/
+
+ArraySequence<int> MCTS(const Position position, int depth) {
+
+    if (position.nMoves == Position::WIDTH * Position::HEIGHT) // check for draw game
+        return ArraySequence<int>(3, 0);
+
+    if (depth == 0) {
+        PriorityQueue<std::pair<int, int>> scoreQueue = PriorityQueue<std::pair<int, int>>();
+        //#pragma omp parallel for shared(position, heuristicScoreQueue)
+        for (int x = 0; x < Position::HEIGHT; x++) {
+            for (int y = 0; y < Position::WIDTH; y++) {
+                if (position.radius + 2 > std::max(std::abs(x - position.centerX), std::abs(y - position.centerY))) {
+                    if (position.canMove(x, y)) {
+                        std::pair<int, int> move = std::pair<int, int>(x, y);
+                        Position newPosition = position;
+                        newPosition.move(x, y);
+                        int eval = position.evalMove(x, y) - MCTS(newPosition, depth + 1)[2];
+                        scoreQueue.Insert(move, eval);
+                    }
+                }
+            }
+        }
+        for (int i = 0; i < scoreQueue.GetLength(); i++)
+            std::cout << scoreQueue[i].item.first << " " << scoreQueue[i].item.second << " " << scoreQueue[i].priority << std::endl;
+        ArraySequence<int> bestMove = ArraySequence<int>(3, -100000);
+        Item<std::pair<int, int>> item = scoreQueue.GetHighestPriorityItem();
+        bestMove[0] = item.item.first;
+        bestMove[1] = item.item.second;
+        bestMove[2] = item.priority;
+        return bestMove;
+    }
+    else {
+        PriorityQueue<std::pair<int, int>> heuristicScoreQueue = PriorityQueue<std::pair<int, int>>();
+        //#pragma omp parallel for shared(position, heuristicScoreQueue)
+        for (int x = 0; x < Position::HEIGHT; x++) {
+            for (int y = 0; y < Position::WIDTH; y++) {
+                if (position.radius + 2 > std::max(std::abs(x - position.centerX), std::abs(y - position.centerY))) {
+                    if (position.canMove(x, y)) {
+                        std::pair<int, int> move = std::pair<int, int>(x, y);
+                        int eval = position.evalMove(x, y);
+                        heuristicScoreQueue.Insert(move, eval);
+                    }
+                }
+            }
+        }
+        for (int i = 0; i < heuristicScoreQueue.GetLength(); i++)
+            std::cout << position.currentPlayer << " d" << depth << " " << heuristicScoreQueue[i].item.first << " " << heuristicScoreQueue[i].item.second << " " << heuristicScoreQueue[i].priority << std::endl;
+        ArraySequence<int> bestMove = ArraySequence<int>(3, -100000);
+        Item<std::pair<int, int>> item = heuristicScoreQueue.GetHighestPriorityItem();
+        //check win
+        if (item.priority > 1000 or depth == MAX_DEPTH_MCTS or position.nMoves < 5) {
+            bestMove[0] = item.item.first;
+            bestMove[1] = item.item.second;
+            bestMove[2] = item.priority - depth;
+            return bestMove;
+        }
+        // check future
+        Position newPosition = position;
+        newPosition.move(item.item.first, item.item.second);
+        int opEval = MCTS(newPosition, depth + 1)[2];
+        int Eval = item.priority - opEval;
+        bestMove[0] = item.item.first;
+        bestMove[1] = item.item.second;
+        bestMove[2] = Eval;
+        return bestMove;
+    }
+}
