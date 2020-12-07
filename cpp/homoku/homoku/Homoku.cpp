@@ -8,22 +8,6 @@
 
 int main()
 {
-    /*
-    PriorityQueue<int> pQ = PriorityQueue<int>();
-    for (int i = 10; i > 0; i--) {
-        int x = std::rand();
-        std::cout << x << std::endl;
-        pQ.Insert(x, x);
-    }
-    std::cout << "---------"<< std::endl;
-    for (int i = 0; i < pQ.GetLength(); i++) {
-        std::cout << pQ.GetItem(i).item << std::endl;
-    }
-    */
-
-    ///*
-    // make Game Map
-    //GameBoard gameMatrix = GameBoard(Position::HEIGHT, ArraySequence<int>(Position::WIDTH, 0));
 
     //make Position
     Position position = Position();
@@ -150,19 +134,20 @@ int main()
 
     int movesCounter = 0;
     if (player == -1) {
-        x = ((int)floor(Position::HEIGHT / 2.0));
-        y = ((int)floor(Position::HEIGHT / 2.0));
+        x = position.centerX;
+        y = position.centerY;
         position.move(x, y);
         std::cout << x << ' ' << y << std::endl;
         movesCounter++;
     }
-    ArraySequence<int> AImove;
+
+    Move AImove;
     while (true)
     {
         std::cin >> x >> y;
 
         if (position.canMove(x, y)) {
-            if (position.evalMove(x, y) > 1000) {
+            if (position.isWinningMove(x, y)) {
                 win = true;
                 winner = player;
                 std::cout << -1 << ' ' << -1 << " " << winner << std::endl;
@@ -173,8 +158,8 @@ int main()
             }
         }
         if (movesCounter == 0) {
-            x = ((int)floor(Position::HEIGHT / 2.0));
-            y = ((int)floor(Position::HEIGHT / 2.0));
+            x = position.centerX;
+            y = position.centerY;
             if (position.canMove(x, y)) {
                 position.move(x, y);
             }
@@ -188,19 +173,21 @@ int main()
             //ArraySequence<int> AImove = negamax(position, searchPattern, 0, 0, 100);
             AImove = negamax(position, 0, 0, 100);
             //AImove = MCTS(position, 0);
-            x = AImove[0];
-            y = AImove[1];
-            if (position.evalMove(x, y) > 1000) {
+            x = AImove.item.first;
+            y = AImove.item.second;
+            if (position.isWinningMove(x, y)) {
                 win = true;
                 winner = -player;
             }
-            position.move(AImove[0], AImove[1]);
+            position.move(x, y);
             
         }
         movesCounter++;
         if (win) {
             std::cout << x << ' ' << y << " " << winner << std::endl;
         }
-        std::cout << x << ' ' << y << std::endl;
+        else {
+            std::cout << x << ' ' << y << std::endl;
+        }
     }
 }

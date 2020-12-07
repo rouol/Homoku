@@ -1,12 +1,12 @@
 ﻿  Homoku.cpp
-C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\Homoku.h(414,89): warning C4244: return: преобразование "double" в "int", возможна потеря данных
+C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\Homoku.h(643,114): warning C4244: return: преобразование "double" в "int", возможна потеря данных
 C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\Sequence.h(131,1): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
 C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\Sequence.h(125): message : во время компиляции функции-члена класс шаблон "Sequence<T> *ArraySequence<T>::Concat(Sequence<T> *)"
           with
           [
               T=int
           ]
-C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\Homoku.h(35): message : выполняется компиляция ссылки на экземпляр класс шаблон функции "ArraySequence<int>"
+C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\Homoku.h(40): message : выполняется компиляция ссылки на экземпляр класс шаблон функции "ArraySequence<int>"
 C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\Sequence.h(113,1): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
 C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\Sequence.h(109): message : во время компиляции функции-члена класс шаблон "Sequence<T> *ArraySequence<T>::GetSubSequence(const size_t,const size_t)"
           with
@@ -36,14 +36,10 @@ C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\Sequence.h(249): message : во
           [
               T=Item<std::pair<int,int>>
           ]
-C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\PriorityQueue.h(76): message : выполняется компиляция ссылки на экземпляр класс шаблон функции "LinkedListSequence<Item<T>>"
-          with
-          [
-              T=std::pair<int,int>
-          ]
+C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\PriorityQueue.h(76): message : выполняется компиляция ссылки на экземпляр класс шаблон функции "LinkedListSequence<Item<std::pair<int,int>>>"
 C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\PriorityQueue.h(75): message : во время компиляции функции-члена класс шаблон "PriorityQueue<std::pair<int,int>>::~PriorityQueue(void)"
-C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\Homoku.h(628): message : выполняется компиляция ссылки на экземпляр шаблон функции "PriorityQueue<std::pair<int,int>>::~PriorityQueue(void)"
-C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\Homoku.h(628): message : выполняется компиляция ссылки на экземпляр класс шаблон функции "PriorityQueue<std::pair<int,int>>"
+C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\Homoku.h(874): message : выполняется компиляция ссылки на экземпляр шаблон функции "PriorityQueue<std::pair<int,int>>::~PriorityQueue(void)"
+C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\Homoku.h(874): message : выполняется компиляция ссылки на экземпляр класс шаблон функции "PriorityQueue<std::pair<int,int>>"
 C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\Sequence.h(238,1): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
 C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\Sequence.h(237): message : во время компиляции функции-члена класс шаблон "Sequence<T> *LinkedListSequence<T>::GetSubSequence(const size_t,const size_t)"
           with
@@ -52,8 +48,8 @@ C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\Sequence.h(237): message : во
           ]
 C:\Raul\programming\cpp\Homoku\cpp\homoku\homoku\Sequence.h(243,1): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
   Создание кода
-  7 of 513 functions ( 1.4%) were compiled, the rest were copied from previous compilation.
+  3 of 518 functions ( 0.6%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    6 functions had inline decision re-evaluated but remain unchanged
+    1 functions had inline decision re-evaluated but remain unchanged
   Создание кода завершено
   homoku.vcxproj -> C:\Raul\programming\cpp\Homoku\cpp\homoku\x64\Release\homoku.exe
