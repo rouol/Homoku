@@ -6,8 +6,14 @@
 #include <omp.h>
 #include <cstdlib>
 
+// for data sampling
+#include <fstream>
+
 int main()
 {
+
+    //std::ofstream MatrixsFile("matrixs.txt");
+    //std::ofstream MovesFile("moves.txt");
 
     //make Position
     Position position = Position();
@@ -136,6 +142,10 @@ int main()
     if (player == -1) {
         x = position.centerX;
         y = position.centerY;
+        //for (int i = 0; i < position.gameBoard.GetLength(); i++)
+        //    MatrixsFile << &position.gameBoard[i];
+        //MatrixsFile << std::endl;
+        //MovesFile << x << ' ' << y << std::endl;
         position.move(x, y);
         std::cout << x << ' ' << y << std::endl;
         movesCounter++;
@@ -145,15 +155,27 @@ int main()
     while (true)
     {
         std::cin >> x >> y;
+        //AImove = negamax(position, 0, 0, 100);
+        //AImove = MCTS(position, 0);
+        //x = AImove.item.first;
+        //y = AImove.item.second;
 
         if (position.canMove(x, y)) {
             if (position.isWinningMove(x, y)) {
                 win = true;
                 winner = player;
+                //for (int i = 0; i < position.gameBoard.GetLength(); i++)
+                //    MatrixsFile << &position.gameBoard[i];
+                //MatrixsFile << std::endl;
+                //MovesFile << x << ' ' << y << std::endl;
                 std::cout << -1 << ' ' << -1 << " " << winner << std::endl;
                 break;
             }
             else {
+                //for (int i = 0; i < position.gameBoard.GetLength(); i++)
+                //    MatrixsFile << &position.gameBoard[i];
+                //MatrixsFile << std::endl;
+                //MovesFile << x << ' ' << y << std::endl;
                 position.move(x, y);
             }
         }
@@ -162,11 +184,13 @@ int main()
             y = position.centerY;
             if (position.canMove(x, y)) {
                 position.move(x, y);
+                std::cout << x << ' ' << y << std::endl;
             }
             else {
                 x--;
                 y++;
                 position.move(x, y);
+                std::cout << x << ' ' << y << std::endl;
             }
         }
         else {
@@ -175,19 +199,37 @@ int main()
             //AImove = MCTS(position, 0);
             x = AImove.item.first;
             y = AImove.item.second;
-            if (position.isWinningMove(x, y)) {
+            if (x < 0) {
+                win = true;
+                winner = player;
+                std::cout << x << ' ' << y << " " << winner << std::endl;
+                break;
+            } else if (position.isWinningMove(x, y)) {
                 win = true;
                 winner = -player;
+                std::cout << x << ' ' << y << " " << winner << std::endl;
+                break;
             }
+            //for (int i = 0; i < position.gameBoard.GetLength(); i++)
+            //    MatrixsFile << &position.gameBoard[i];
+            //MatrixsFile << std::endl;
+            //MovesFile << x << ' ' << y << std::endl;
             position.move(x, y);
-            
+            std::cout << x << ' ' << y << std::endl;
         }
         movesCounter++;
+        /*
         if (win) {
             std::cout << x << ' ' << y << " " << winner << std::endl;
+            break;
         }
         else {
             std::cout << x << ' ' << y << std::endl;
         }
+        */
     }
+
+    //MatrixsFile.close();
+    //MovesFile.close();
+
 }

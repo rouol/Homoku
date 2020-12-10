@@ -322,7 +322,7 @@ private:
 template <typename T>
 std::ostream& operator<<(std::ostream& os, Sequence<T>* sequence) {
 	for (int i = 0; i < sequence->GetLength(); i++) {
-		os << sequence->Get(i) << '\t';
+		os << sequence->Get(i) << ' ';
 	}
 	//os << std::endl;
 	return os;

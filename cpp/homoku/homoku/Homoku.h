@@ -4,6 +4,8 @@
 #include <utility>
 #include <omp.h>
 
+
+
 /**
  * Const values for Gomoku.
  */
@@ -651,100 +653,195 @@ public:
     ///*
     bool isWinningMove(int x, int y) const {
 
+        //horizontal
+        //right
+        int horizontal = 0;
+        int i1 = 0;
+        while (gameBoard[x][y + i1] == currentPlayer or i1 == 0) {
+            i1++;
+            horizontal++;
+            if (i1 <= 5 and y + i1 < HEIGHT) {
+                continue;
+            }
+            else break;
+        }
+        //left
+        int i2 = 0;
+        while (gameBoard[x][y - i2] == currentPlayer or i2 == 0) {
+            i2++;
+            horizontal++;
+            if (i2 <= 5 and y - i2 >= 0) {
+                continue;
+            }
+            else break;
+        }
+        if (horizontal == 6) return true;
+        //vertical
+        //down
+        int vertical = 0;
+        int i3 = 0;
+        while (gameBoard[x + i3][y] == currentPlayer or i3 == 0) {
+            i3++;
+            vertical++;
+            if (i3 <= 5 and x + i3 < HEIGHT) {
+                continue;
+            }
+            else break;
+        }
+        //up
+        int i4 = 0;
+        while (gameBoard[x - i4][y] == currentPlayer or i4 == 0) {
+            i4++;
+            vertical++;
+            if (i4 <= 5 and x - i4 >= 0) {
+                continue;
+            }
+            else break;
+        }
+        if (vertical == 6) return true;
+        //diagonal1 NE-SW
+        int diagonal1 = 0;
+        int i5 = 0;
+        while (gameBoard[x + i5][y + i5] == currentPlayer or i5 == 0) {
+            i5++;
+            diagonal1++;
+            if (i5 <= 5 and x + i5 < HEIGHT and y + i5 < HEIGHT) {
+                continue;
+            }
+            else break;
+        }
+        int i6 = 0;
+        while (gameBoard[x - i6][y - i6] == currentPlayer or i6 == 0) {
+            i6++;
+            diagonal1++;
+            if (i6 <= 5 and x - i6 >= 0 and y - i6 >= 0) {
+                continue;
+            }
+            else break;
+        }
+        if (diagonal1 == 6) return true;
+        //diagonal2 NW-SE
+        int diagonal2 = 0;
+        int i7 = 0;
+        while (gameBoard[x - i7][y + i7] == currentPlayer or i7 == 0) {
+            i7++;
+            diagonal2++;
+            if (i7 <= 5 and x - i7 >= 0 and y + i7 < HEIGHT) {
+                continue;
+            }
+            else break;
+        }
+        int i8 = 0;
+        while (gameBoard[x + i8][y - i8] == currentPlayer or i8 == 0) {
+            i8++;
+            diagonal2++;
+            if (i8 <= 5 and x + i8 < HEIGHT and y - i8 >= 0) {
+                continue;
+            }
+            else break;
+        }
+        if (diagonal2 == 6) return true;
+
+        return false;
+
+        /*
         // check 5 in a row in every direction
         ArraySequence<int> is = ArraySequence<int>(8, 0);
         //horizontal
         //right
+        int horizontal = 0;
         //count same symbol
         while (gameBoard[x][y + is[0]] == currentPlayer or is[0] == 0) {
             is[0]++;
-            //horizontal++;
+            horizontal++;
             if (is[0] <= 5 and y + is[0] < HEIGHT) {
                 continue;
             }
             else break;
         }
-        int horizontal = is[0] - 1;
+        //int horizontal = is[0] - 1;
         //left
         while (gameBoard[x][y - is[1]] == currentPlayer or is[1] == 0) {
             is[1]++;
-            //horizontal++;
+            horizontal++;
             if (is[1] <= 5 and y - is[1] >= 0) {
                 continue;
             }
             else break;
         }
-        horizontal += is[1] - 1;
+        horizontal -= 2;
         if (horizontal == 4) return true;
 
         //vertical
         //down
-        //int vertical = 0;
+        int vertical = 0;
         while (gameBoard[x + is[2]][y] == currentPlayer or is[2] == 0) {
             is[2]++;
-            //vertical++;
+            vertical++;
             if (is[2] <= 5 and x + is[2] < HEIGHT) {
                 continue;
             }
             else break;
         }
-        int vertical = is[2] - 1;
+        //int vertical = is[2] - 1;
         //up
         while (gameBoard[x - is[3]][y] == currentPlayer or is[3] == 0) {
             is[3]++;
-            //vertical++;
+            vertical++;
             if (is[3] <= 5 and x - is[3] >= 0) {
                 continue;
             }
             else break;
         }
-        vertical += is[3] - 1;
+        vertical -= 2;
         if (vertical == 4) return true;
 
         //diagonal1 NE-SW
-        //int diagonal1 = 0;
+        int diagonal1 = 0;
         while (gameBoard[x - is[4]][y + is[4]] == currentPlayer or is[4] == 0) {
             is[4]++;
-            //diagonal1++;
+            diagonal1++;
             if (is[4] <= 5 and x + is[4] < HEIGHT and y + is[4] < HEIGHT) {
                 continue;
             }
             else break;
         }
-        int diagonal1 = is[4] - 1;
+        //int diagonal1 = is[4] - 1;
         while (gameBoard[x - is[5]][y + is[5]] == currentPlayer or is[5] == 0) {
             is[5]++;
-            //diagonal1++;
+            diagonal1++;
             if (is[5] <= 5 and x - is[5] >= 0 and y - is[5] >= 0) {
                 continue;
             }
             else break;
         }
-        diagonal1 += is[5] - 1;
+        diagonal1 -= 2;
         if (diagonal1 == 4) return true;
 
         //diagonal2 NW-SE
-        //int diagonal2 = 0;
+        int diagonal2 = 0;
         while (gameBoard[x - is[6]][y + is[6]] == currentPlayer or is[6] == 0) {
             is[6]++;
-            //diagonal2++;
+            diagonal2++;
             if (is[6] <= 5 and x - is[6] >= 0 and y + is[6] < HEIGHT) {
                 continue;
             }
             else break;
         }
-        int diagonal2 = is[6] - 1;
+        //int diagonal2 = is[6] - 1;
         while (gameBoard[x + is[7]][y - is[7]] == currentPlayer or is[7] == 0) {
             is[7]++;
-            //diagonal2++;
+            diagonal2++;
             if (is[7] <= 5 and x + is[7] < HEIGHT and y - is[7] >= 0) {
                 continue;
             }
             else break;
         }
-        diagonal2 += is[7] - 1;
+        diagonal2 -= 2;
         if (diagonal2 == 4) return true;
+        
         return false;
+        */
     }
     /**
      * @return score of the position.
@@ -960,7 +1057,7 @@ Move negamax(const Position position, int depth, int alpha, int beta) {
             int opEval = negamax(newPosition, depth + 1, 0, 100).priority;
             int Eval = item.priority - opEval;
             if (Eval < -1000) {
-                //scoreQueue.Insert(item.item, -100000);
+                //scoreQueue.Insert(item.item, -1000000);
                 continue;
             }
             else {
@@ -986,8 +1083,8 @@ Move negamax(const Position position, int depth, int alpha, int beta) {
         if (scoreQueue.GetLength() == 0) {
             // make lose sign
             Move move;
-            move.item = std::pair<int, int>(-1, -1);
-            move.priority = -100000;
+            move.item = std::pair<int, int>(-2, -2);
+            move.priority = -1000000;
             return move;
         }
         else

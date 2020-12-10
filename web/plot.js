@@ -164,7 +164,7 @@ function successMove(data){
     if (ReceivedData.length == 3) {
         winner = ReceivedData[2];
     }
-    if (ReceivedData[0] != -1) {
+    if (ReceivedData[0] >= 0) {
         x = ReceivedData[0];
         y = ReceivedData[1];
         makeMove(x, y);
