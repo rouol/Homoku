@@ -5,7 +5,6 @@
 #include <omp.h>
 
 
-
 /**
  * Const values for Gomoku.
  */
@@ -72,21 +71,6 @@ public:
         currentPlayer = -currentPlayer;
         nMoves++;
     }
-
-    /**
-     * Evals a this Position
-     * @return eval of the Position
-     */
-    /*
-    int evalPosition() const {
-
-        // array with 2, 3, 4 combos
-        ArraySequence<int> combos = ArraySequence<int>(3);
-
-        //look for
-
-    }
-    */
 
     /**
      * Evals a move
@@ -650,7 +634,6 @@ public:
      * This function should never be called if player can't move there.
      * @return true if current player makes an alignment by playing this move.
      */
-    ///*
     bool isWinningMove(int x, int y) const {
 
         //horizontal
@@ -843,45 +826,12 @@ public:
         return false;
         */
     }
-    /**
-     * @return score of the position.
-     */
-    /*
-    int score() const;
-    */
 };
-
-
-/*
- * Finds max score element
- * @return max element
- */
-/*
-ArraySequence<int> findMaxScore(MatrixInt scoreArray) {
-    ArraySequence<int> posDataMax = scoreArray[0];
-    if (scoreArray.GetLength() > 1) {
-        ArraySequence<int> posData;
-        for (int i = 1; i < scoreArray.GetLength(); i++) {
-            posData = scoreArray[i];
-            if (posData[2] > posDataMax[2])
-                posDataMax = posData;
-        }
-    }
-    return posDataMax;
-}
-*/
 
 /*
  * Recursively solve a Gomoku position using Negamax (opt Minimax) algorithm.
- * @return the score of a position:
- *  - 0 for a draw game
- *  - positive score if you can win whatever your opponent is playing. Your score is
- *    the number of moves before the end you can win (the faster you win, the higher your score)
- *  - negative score if your opponent can force you to lose. Your score is the oposite of
- *    the number of moves before the end you will lose (the faster you lose, the lower your score).
  */
-///*
-Move negamax(const Position position, int depth, int alpha, int beta) {
+Move negamax(const Position position, int depth = 0, int alpha = 0, int beta = 100) {
 
     if (position.nMoves == Position::WIDTH * Position::HEIGHT) // check for draw game
     {
@@ -889,10 +839,6 @@ Move negamax(const Position position, int depth, int alpha, int beta) {
         move.item = std::pair<int, int>(-1, -1);
         move.priority = 0;
     }
-
-    //if (depth == MAX_DEPTH) // depth check
-        //return position.score(); 
-        //return ArraySequence<int>(3, 0);
 
     int max = 81 - depth;	// upper bound of our score as we cannot win immediately
     if (beta > max) {
@@ -905,74 +851,10 @@ Move negamax(const Position position, int depth, int alpha, int beta) {
         return move;
     }  // prune the exploration if the [alpha;beta] window is empty.
 
-    /*
-    MatrixInt scoreArray = MatrixInt();
-    //MatrixInt scoreArray = MatrixInt(searchPattern.GetLength(), ArraySequence<int>(3, -100000));
-    //MatrixInt scoreArray = searchPattern;
-    //#pragma omp parallel for shared(position, scoreArray, alpha, beta)
-    for (int i = 0; i < searchPattern.GetLength(); i++) {
-        //int x = scoreArray[i][0];
-        //int y = scoreArray[i][1];
-        int x = searchPattern[i][0];
-        int y = searchPattern[i][1];
-        if (position.radius + 2 > std::max(std::abs(x - position.centerX), std::abs(y - position.centerY))) {
-            if (position.canMove(x, y)) {
-                ArraySequence<int> posData = ArraySequence<int>(3);
-                posData[0] = x;
-                posData[1] = y;
-                int myEval = position.evalMove(x, y) - depth;    
-                if (depth == 0) {
-                    std::cout << x << " " << y << std::endl;
-                    if (x == 10 and y == 8) {
-                        std::cout << myEval << std::endl;
-                    }
-                }
-                if (myEval > 1000) {
-                    posData[2] = myEval;
-                    std::cout << "win of " << position.currentPlayer << " at depth " << depth << " : " << &posData << std::endl;
-                    return posData;
-                }
-                else if (depth == MAX_DEPTH or position.nMoves < 5) {
-                    //scoreArray[i][2] = myEval;
-                    posData[2] = myEval;
-                    if (myEval > alpha) { alpha = myEval; }
-                    if (myEval >= beta) {
-                        //scoreArray.Append(posData);
-                        //scoreArray[i] = posData;
-                        return posData;
-                        //break;
-                    }
-                }
-                else {
-                    Position newPosition = position;
-                    newPosition.move(x, y);
-                    int opEval = negamax(newPosition, searchPattern, depth + 1, alpha - 1, beta - 1)[2];
-                    int Eval = myEval - opEval;
-                    posData[2] = Eval;
-                    if (Eval < -1000) {
-                        //std::cout << "lose " << position.currentPlayer << " : " << &posData << std::endl;
-                        //return posData;
-                        continue;
-                    }
-                    //scoreArray[i][2] = Eval;
-                    if (Eval > alpha) { alpha = Eval; }
-                    if (Eval >= beta) {
-                        //scoreArray.Append(posData);
-                        //scoreArray[i] = posData;
-                        return posData;
-                        //break;
-                    }
-                }
-                scoreArray.Append(posData);
-            }
-        }
-    }
-    */
     PriorityQueue<std::pair<int, int>> heuristicScoreQueue = PriorityQueue<std::pair<int, int>>();
     #pragma omp parallel for shared(position, heuristicScoreQueue)
     for (int x = position.lowX - 1; x <= position.highX + 1; x++) {
         for (int y = position.lowY - 1; y <= position.highY + 1; y++) {
-            //if (position.radius + 2 > std::max(std::abs(x - position.centerX), std::abs(y - position.centerY))) {
             if (position.canMove(x, y)) {
                 std::pair<int, int> move = std::pair<int, int>(x, y);
                 int eval = position.evalMove(x, y);
@@ -981,36 +863,11 @@ Move negamax(const Position position, int depth, int alpha, int beta) {
                     heuristicScoreQueue.Insert(move, eval);
                 }
             }
-            //}
         }
     }
-    /*
-    for (int x = 0; x < Position::HEIGHT; x++) {
-        for (int y = 0; y < Position::WIDTH; y++) {
-            if (position.radius + 2 > std::max(std::abs(x - position.centerX), std::abs(y - position.centerY))) {
-                if (position.canMove(x, y)) {
-                    std::pair<int, int> move = std::pair<int, int>(x, y);
-                    int eval = position.evalMove(x, y);
-                    #pragma omp critical
-                    {
-                        heuristicScoreQueue.Insert(move, eval);
-                    }
-                }
-            }
-        }
-    }
-    */
-    /*
-    if (depth == 0) {
-        for (int i = 0; i < heuristicScoreQueue.GetLength(); i++)
-            std::cout << heuristicScoreQueue[i].item.first << " " << heuristicScoreQueue[i].item.second << " " << heuristicScoreQueue[i].priority << std::endl;
-    }
-    */
     // check win
     Move firstMove = heuristicScoreQueue.GetHighestPriorityItem();
-    //ArraySequence<int> bestMove = ArraySequence<int>(3, -100000);
-    if (depth == MAX_DEPTH or position.nMoves < 5 or firstMove.priority > 5000) {
-        //Item<std::pair<int, int>> item = heuristicScoreQueue.GetHighestPriorityItem();
+    if (depth == MAX_DEPTH or position.nMoves < 5 or firstMove.priority > 1000) {
         firstMove.priority = firstMove.priority - depth;
         return firstMove;
     }
@@ -1024,44 +881,38 @@ Move negamax(const Position position, int depth, int alpha, int beta) {
         PriorityQueue<std::pair<int, int>> scoreQueue = PriorityQueue<std::pair<int, int>>();
 
         // optimization on depth of view
-        // check future of the first move
+        // check future of the best move
+        int start = 1;
         Position newPosition = position;
         newPosition.move(firstMove.item.first, firstMove.item.second);
-        int opEval = negamax(newPosition, depth + 1, 0, 100).priority;
+        int opEval = negamax(newPosition, depth + 1).priority;
         int Eval = firstMove.priority - opEval;
         if (Eval > -1000) {
-            if (depth < MAX_DEPTH - 3) depth = MAX_DEPTH - 3;
-            /*
-            if (Eval > alpha) { alpha = Eval; }
-            if (Eval >= beta) {
-                bestMove[0] = firstMove.item.first;
-                bestMove[1] = firstMove.item.second;
-                bestMove[2] = Eval;
-                return bestMove;
-            }
-            */
-            //scoreQueue.Insert(firstMove.item, Eval);
+            //if (depth == 0) depth = MAX_DEPTH - 3;
+            //start = 0;
+            if (depth == 0) return firstMove;
+            else { scoreQueue.Insert(firstMove.item, Eval); }
         }
 
         //#pragma omp parallel for shared(position, heuristicScoreQueue, scoreQueue, bestMove)
-        for (int i = 0; i < heuristicScoreQueue.GetLength(); i++) {
+        for (int i = start; i < heuristicScoreQueue.GetLength(); i++) {
             Item<std::pair<int, int>> item = heuristicScoreQueue.GetItem(i);
             //check win
+            /*
             if (item.priority > 1000) {
                 item.priority = item.priority - depth;
                 return item;
             }
+            */
             // check future
             Position newPosition = position;
             newPosition.move(item.item.first, item.item.second);
-            int opEval = negamax(newPosition, depth + 1, 0, 100).priority;
-            int Eval = item.priority - opEval;
-            if (Eval < -1000) {
+            int opEval = negamax(newPosition, depth + 1).priority;
+            if (opEval > 1000) {
                 //scoreQueue.Insert(item.item, -1000000);
                 continue;
-            }
-            else {
-                ///*
+            } else {
+                int Eval = item.priority - opEval;
                 if (Eval > alpha) {
                     alpha = Eval;
                 }
@@ -1069,17 +920,10 @@ Move negamax(const Position position, int depth, int alpha, int beta) {
                     item.priority = Eval;
                     return item;
                 }
-                //*/
                 scoreQueue.Insert(item.item, Eval);
                 break;
             }
         }
-        /*
-        if (depth == 0) {
-            for (int i = 0; i < scoreQueue.GetLength(); i++)
-                std::cout << scoreQueue[i].item.first << " " << scoreQueue[i].item.second << " " << scoreQueue[i].priority << std::endl;
-        }
-        */
         if (scoreQueue.GetLength() == 0) {
             // make lose sign
             Move move;
@@ -1111,7 +955,6 @@ Move negamax(const Position position, int depth, int alpha, int beta) {
     */
     
 }
-//*/
 
 Move MCTS(const Position position, int depth) {
 
