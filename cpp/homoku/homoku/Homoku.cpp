@@ -35,7 +35,7 @@ int main()
     while (true)
     {
         std::cin >> x >> y;
-        //AImove = negamax(position, 0, 0, 100);
+        //AImove = negamax(position);
         //AImove = MCTS(position, 0);
         //x = AImove.item.first;
         //y = AImove.item.second;
@@ -44,6 +44,7 @@ int main()
             if (position.isWinningMove(x, y)) {
                 win = true;
                 winner = player;
+                position.move(x, y);
                 std::cout << -1 << ' ' << -1 << " " << winner << std::endl;
                 break;
             }
@@ -82,6 +83,7 @@ int main()
             } else if (position.isWinningMove(x, y)) {
                 win = true;
                 winner = -player;
+                position.move(x, y);
                 std::cout << x << ' ' << y << " " << winner << std::endl;
                 break;
             }
@@ -90,4 +92,10 @@ int main()
         }
         movesCounter++;
     }
+    /*
+    for (int i = 0; i < position.gameBoard.GetLength(); i++) {
+        std::cout << &position.gameBoard[i] << std::endl;
+    }
+    */
+
 }
